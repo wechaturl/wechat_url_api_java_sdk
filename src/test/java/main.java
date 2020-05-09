@@ -18,7 +18,7 @@ public class main {
         DomainUrlMonitorService DomainUrl= new DomainUrlMonitorService();
 
 
-        UrlParam parme=new UrlParam(37937215,"a50d38748960jfusor80ae1a725b7c95");
+        UrlParam parme=new UrlParam(12345678,"GetAppKeyAtThe:https://www.wechaturl.us");
 
 
         Response<UrlArrayVO<DomainUrlMonitorVO>> res=DomainUrl.listUrl(parme);
