@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="PhoenixWechaurlSdk" />
+        <module name="PhoenixWechatUrlSdk" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="PhoenixWechaurlSdk" target="8" />
+      <module name="PhoenixWechatUrlSdk" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

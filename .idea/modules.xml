@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PhoenixWechaurlSdk.iml" filepath="$PROJECT_DIR$/PhoenixWechaurlSdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PhoenixWechatUrlSdk.iml" filepath="$PROJECT_DIR$/PhoenixWechatUrlSdk.iml" />
     </modules>
   </component>
 </project>
