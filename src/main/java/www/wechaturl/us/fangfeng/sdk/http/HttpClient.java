@@ -14,13 +14,16 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Supplier;
@@ -33,15 +36,28 @@ public class HttpClient {
 
   private Logger LOG = LoggerFactory.getLogger(HttpClient.class);
 
-  public HttpClient(){
-  };
+  public HttpClient() {
+  }
+
+  ;
 
   public String doGet(String url, Map<String, String> paraMap) {
-    CloseableHttpClient client = null;
-    CloseableHttpResponse response = null;
-    String result = null;
+    SSLContext sslContext = null;
     try {
-      client = HttpClients.createDefault();
+      sslContext = new SSLContextBuilder()
+              .loadTrustMaterial(null, (certificate, authType) -> true)
+              .build();
+    } catch (Exception e) {
+      LOG.error(e.getMessage());
+      e.printStackTrace();
+    }
+    CloseableHttpClient client = HttpClients.custom()
+            .setSSLContext(sslContext)
+            .setSSLHostnameVerifier(new NoopHostnameVerifier())
+            .build();
+    CloseableHttpResponse response = null;
+    String result = "";
+    try {
       URIBuilder uriBuilder = new URIBuilder(url);
       uriBuilder.setParameters(convert(paraMap));
       HttpGet httpGet = new HttpGet(uriBuilder.build());
@@ -74,11 +90,23 @@ public class HttpClient {
   }
 
   public String doPost(String url, Map<String, String> paraMap) {
-    CloseableHttpClient client = HttpClients.createDefault();;
-    CloseableHttpResponse response = null;
-    String result = null;
+    SSLContext sslContext = null;
     try {
-      paraMap.put("api_version","java-1.0.0");
+      sslContext = new SSLContextBuilder()
+              .loadTrustMaterial(null, (certificate, authType) -> true)
+              .build();
+    } catch (Exception e) {
+      LOG.error(e.getMessage());
+      e.printStackTrace();
+    }
+    CloseableHttpClient client = HttpClients.custom()
+            .setSSLContext(sslContext)
+            .setSSLHostnameVerifier(new NoopHostnameVerifier())
+            .build();
+    String result = null;
+    CloseableHttpResponse response = null;
+    try {
+      paraMap.put("api_version", "java-1.0.0");
       HttpPost httpPost = new HttpPost(url);
       httpPost.setConfig(getDefaultRequestConfig());
       httpPost.setEntity(new UrlEncodedFormEntity(convert(paraMap), UTF_8));
@@ -95,7 +123,7 @@ public class HttpClient {
         result = EntityUtils.toString(entity, UTF_8);
       }
     } catch (Exception e) {
-      LOG.error(">>>>>>> http get failed <<<<<<<<< ");
+      LOG.error(">>>>>>> https post failed <<<<<<<<< ");
       LOG.error(e.getMessage());
       e.printStackTrace();
     } finally {
@@ -136,18 +164,19 @@ public class HttpClient {
     return nameValuePairs;
   }
 
-  private CloseableHttpResponse executeCircuitBreaker(String circuitBreakerName, Supplier<CloseableHttpResponse> supplier, Supplier<CloseableHttpResponse> fallback){
+  private CloseableHttpResponse executeCircuitBreaker(String circuitBreakerName, Supplier<CloseableHttpResponse> supplier, Supplier<CloseableHttpResponse> fallback) {
     CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults(circuitBreakerName);
     Supplier<CloseableHttpResponse> decoratedSupplier = CircuitBreaker.decorateSupplier(circuitBreaker, supplier);
     Retry retry = Retry.ofDefaults(circuitBreakerName);
     Supplier<CloseableHttpResponse> retrySupplier = Retry.decorateSupplier(retry, decoratedSupplier);
-    if( fallback == null){
+    if (fallback == null) {
       return Try.ofSupplier(retrySupplier).get();
-    }else {
+    } else {
       return Try.ofSupplier(retrySupplier).recover(e -> {
         LOG.warn(String.format("Service %s is not available, calling fallback!", circuitBreakerName));
         return fallback.get();
       }).get();
     }
   }
+
 }
