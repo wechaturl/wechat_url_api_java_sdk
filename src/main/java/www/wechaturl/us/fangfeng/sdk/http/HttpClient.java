@@ -22,6 +22,7 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -106,7 +107,7 @@ public class HttpClient {
     String result = null;
     CloseableHttpResponse response = null;
     try {
-      paraMap.put("api_version", "java-1.0.0");
+      paraMap.put("api_version", CommonUtil.getSDKVersion());
       HttpPost httpPost = new HttpPost(url);
       httpPost.setConfig(getDefaultRequestConfig());
       httpPost.setEntity(new UrlEncodedFormEntity(convert(paraMap), UTF_8));
