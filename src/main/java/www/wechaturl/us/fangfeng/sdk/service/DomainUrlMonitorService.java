@@ -7,9 +7,9 @@ import www.wechaturl.us.fangfeng.sdk.common.Const;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
 import www.wechaturl.us.fangfeng.sdk.http.HttpClient;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
+import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
 import www.wechaturl.us.fangfeng.sdk.vo.*;
 import org.apache.commons.lang3.StringUtils;
-import www.wechaturl.us.fangfeng.sdk.vo.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +27,8 @@ import java.util.Map;
  * </ul>
  */
 public class DomainUrlMonitorService {
-  private static final String CYCLE_CHECK_URL = "https://wechaturl.us/api/UrlCycleCheck.json";
-  private static final String URL_CHECK_URL = "https://wechaturl.us/api/UrlCheck.json";
+  private String cycleCheckUrl = UrlUtil.getDomainUrlMonitorCycleCheckUrlUrl();
+  private String singleCheckUrl = UrlUtil.getDomainUrlMonitorSingleCheckUrl();
   private ObjectMapper objectMapper = new ObjectMapper();
   private HttpClient httpClient = new HttpClient();
 
@@ -76,7 +76,7 @@ public class DomainUrlMonitorService {
     if(StringUtils.isNotEmpty(urlParam.getIsMonitor())){
       paraMap.put("is_monitor", urlParam.getIsMonitor());
     }
-    String result = httpClient.doPost(CYCLE_CHECK_URL, paraMap);
+    String result = httpClient.doPost(cycleCheckUrl, paraMap);
     return objectMapper.readValue(result, new TypeReference<Response>() {
     });
   }
@@ -113,7 +113,7 @@ public class DomainUrlMonitorService {
     }else {
       paraMap.put("url", urlParam.getUrl());
     }
-    String result = httpClient.doPost(CYCLE_CHECK_URL, paraMap);
+    String result = httpClient.doPost(cycleCheckUrl, paraMap);
     return objectMapper.readValue(result, new TypeReference<Response>() {
     });
   }
@@ -159,7 +159,7 @@ public class DomainUrlMonitorService {
     if(StringUtils.isNotEmpty(urlParam.getIsMonitor())){
       paraMap.put("is_monitor", urlParam.getIsMonitor());
     }
-    String result = httpClient.doPost(CYCLE_CHECK_URL, paraMap);
+    String result = httpClient.doPost(cycleCheckUrl, paraMap);
     return objectMapper.readValue(result, new TypeReference<Response>() {
     });
   }
@@ -200,7 +200,7 @@ public class DomainUrlMonitorService {
     if (StringUtils.isNotEmpty(urlParam.getRows())) {
       paraMap.put("rows", urlParam.getRows());
     }
-    String result = httpClient.doPost(CYCLE_CHECK_URL, paraMap);
+    String result = httpClient.doPost(cycleCheckUrl, paraMap);
     return objectMapper.readValue(result, new TypeReference<Response<UrlArrayVO<DomainUrlMonitorVO>>>() {
     });
   }
@@ -230,7 +230,7 @@ public class DomainUrlMonitorService {
     paraMap.put("appid", urlParam.getAppid());
     paraMap.put("appkey", urlParam.getAppkey());
     paraMap.put("type", Const.OPERATION_FREQUENCY);
-    String result = httpClient.doPost(CYCLE_CHECK_URL, paraMap);
+    String result = httpClient.doPost(cycleCheckUrl, paraMap);
     return objectMapper.readValue(result, new TypeReference<Response<List<Integer>>>() {
     });
   }
@@ -261,7 +261,7 @@ public class DomainUrlMonitorService {
     paraMap.put("appid", urlParam.getAppid());
     paraMap.put("appkey", urlParam.getAppkey());
     paraMap.put("url", urlParam.getUrl());
-    String result = httpClient.doPost(URL_CHECK_URL, paraMap);
+    String result = httpClient.doPost(singleCheckUrl, paraMap);
     return objectMapper.readValue(result, new TypeReference<Response<DomainCheckResultVO>>() {
     });
   }

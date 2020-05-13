@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
 import www.wechaturl.us.fangfeng.sdk.http.HttpClient;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
+import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
 import www.wechaturl.us.fangfeng.sdk.vo.ShieldCloudCheckResponse;
 import www.wechaturl.us.fangfeng.sdk.vo.UrlParam;
 
@@ -17,7 +18,7 @@ public class ShieldService {
   private ObjectMapper objectMapper = new ObjectMapper();
   private HttpClient httpClient = new HttpClient();
 
-  private static final String SHIELD_URL = "https://wechaturl.us/api/CheckIp.json";
+  private String shieldUrl = UrlUtil.getShieldCloudCrawlerCheckUrl();
 
   public ShieldService(){
   }
@@ -43,7 +44,7 @@ public class ShieldService {
     paraMap.put("appid", urlParam.getAppid());
     paraMap.put("appkey", urlParam.getAppkey());
     paraMap.put("ip", urlParam.getIp());
-    String res = httpClient.doPost(SHIELD_URL, paraMap);
+    String res = httpClient.doPost(shieldUrl, paraMap);
     return objectMapper.readValue(res, new TypeReference<ShieldCloudCheckResponse>(){});
   }
 }

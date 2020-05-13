@@ -11,6 +11,7 @@ import www.wechaturl.us.fangfeng.sdk.utils.CharacterUtil;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
 import www.wechaturl.us.fangfeng.sdk.*;
 import org.apache.commons.lang3.StringUtils;
+import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
 import www.wechaturl.us.fangfeng.sdk.vo.*;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ import java.util.Map;
  * </ul>
  */
 public class DomainUrlProtectService {
-  private static final String REQUEST_URL = "https://wechaturl.us/api/DomainShortUrl.json";
+  private String REQUEST_URL = UrlUtil.getDomainUrlProtectUrl();
   private ObjectMapper objectMapper = new ObjectMapper();
   private HttpClient httpClient = new HttpClient();
 

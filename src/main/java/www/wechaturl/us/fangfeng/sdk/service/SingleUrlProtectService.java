@@ -7,6 +7,7 @@ import www.wechaturl.us.fangfeng.sdk.http.HttpClient;
 import www.wechaturl.us.fangfeng.sdk.common.Const;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
+import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
 import www.wechaturl.us.fangfeng.sdk.vo.Response;
 import www.wechaturl.us.fangfeng.sdk.vo.UrlArrayVO;
 import www.wechaturl.us.fangfeng.sdk.vo.UrlParam;
@@ -26,7 +27,7 @@ import java.util.Map;
  * </ul>
  */
 public class SingleUrlProtectService {
-  private static final String REQUEST_URL = "https://wechaturl.us/api/SingleShortUrl.json";
+  private String REQUEST_URL = UrlUtil.getSingleUrlProtectUrl();
   private ObjectMapper objectMapper = new ObjectMapper();
   private HttpClient httpClient = new HttpClient();
 

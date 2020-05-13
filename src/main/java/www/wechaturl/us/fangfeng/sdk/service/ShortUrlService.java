@@ -7,8 +7,8 @@ import www.wechaturl.us.fangfeng.sdk.common.Const;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
 import www.wechaturl.us.fangfeng.sdk.http.HttpClient;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
-import www.wechaturl.us.fangfeng.sdk.*;
 import org.apache.commons.lang3.StringUtils;
+import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
 import www.wechaturl.us.fangfeng.sdk.vo.*;
 
 import java.util.HashMap;
@@ -22,8 +22,8 @@ import java.util.Map;
  * </ul>
  */
 public class ShortUrlService {
-  private static final String ENTRY_DOMAIN_REQUEST_URL = "https://wechaturl.us/api/ShortDomain.json";
-  private static final String LONG_TO_SHORT_URL = "https://wechaturl.us/api/Long2ShortUrl.json";
+  private String shortUrlEntryDomainUrl = UrlUtil.getShortUrlEntryDomainUrl();
+  private String longToShortUrl = UrlUtil.getShortUrlLongToShortUrl();
   private ObjectMapper objectMapper = new ObjectMapper();
   private HttpClient httpClient = new HttpClient();
 
@@ -74,7 +74,7 @@ public class ShortUrlService {
     if (StringUtils.isNotEmpty(urlParam.getRows())) {
       paraMap.put("rows", urlParam.getRows());
     }
-    String result = httpClient.doPost(ENTRY_DOMAIN_REQUEST_URL, paraMap);
+    String result = httpClient.doPost(shortUrlEntryDomainUrl, paraMap);
     return objectMapper.readValue(result, new TypeReference<Response<UrlArrayVO<EntryDomainUrlVO>>>() {
     });
   }
@@ -111,7 +111,7 @@ public class ShortUrlService {
     if(StringUtils.isNotEmpty(urlParam.getEntryType())){
       paraMap.put("entry_type", urlParam.getEntryType());
     }
-    String result = httpClient.doPost(LONG_TO_SHORT_URL, paraMap);
+    String result = httpClient.doPost(longToShortUrl, paraMap);
     return objectMapper.readValue(result, new TypeReference<Response<ShortUrlVO>>() {
     });
   }
