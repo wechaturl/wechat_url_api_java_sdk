@@ -5,15 +5,18 @@ import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
 public class UrlUtilTest {
 
   @Test
+  public void getDomainUrlTest(){
+    Assert.assertEquals("https://wechaturl.us", UrlUtil.getDomain());
+  }
+
+  @Test
   public void getDomainUrlMonitorCycleCheckUrlUrlTest(){
-    String url = UrlUtil.getDomainUrlMonitorCycleCheckUrlUrl();
-    Assert.assertEquals("https://wechaturl.us/api/UrlCycleCheck.json", url);
+    Assert.assertEquals("https://wechaturl.us/api/UrlCycleCheck.json", UrlUtil.getDomainUrlMonitorCycleCheckUrlUrl());
   }
 
   @Test
   public void getDomainUrlMonitorSingleCheckUrlTest(){
-    String url = UrlUtil.getDomainUrlMonitorSingleCheckUrl();
-    Assert.assertEquals("https://wechaturl.us/api/UrlCheck.json", url);
+    Assert.assertEquals("https://wechaturl.us/api/UrlCheck.json", UrlUtil.getDomainUrlMonitorSingleCheckUrl());
   }
 
   @Test

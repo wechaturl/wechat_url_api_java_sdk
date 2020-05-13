@@ -9,7 +9,6 @@ import www.wechaturl.us.fangfeng.sdk.common.Const;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
 import www.wechaturl.us.fangfeng.sdk.utils.CharacterUtil;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
-import www.wechaturl.us.fangfeng.sdk.*;
 import org.apache.commons.lang3.StringUtils;
 import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
 import www.wechaturl.us.fangfeng.sdk.vo.*;

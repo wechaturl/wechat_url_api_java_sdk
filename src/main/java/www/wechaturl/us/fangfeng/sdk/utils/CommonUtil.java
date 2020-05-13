@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class CommonUtil {
@@ -18,17 +19,28 @@ public class CommonUtil {
   }
 
   public static String getResource(String key) {
+    String value = null;
+    InputStream inputStream = null;
     try {
       Properties properties = new Properties();
-      properties.load(CommonUtil.class.getClassLoader().getResourceAsStream(RESOURCE_FILE));
-      return properties.getProperty(key);
+      inputStream = CommonUtil.class.getClassLoader().getResourceAsStream(RESOURCE_FILE);
+      properties.load(inputStream);
+      value = properties.getProperty(key);
     } catch (IOException exception) {
       exception.printStackTrace();
+    } finally {
+      if (inputStream != null) {
+        try {
+          inputStream.close();
+        } catch (IOException exception) {
+          exception.printStackTrace();
+        }
+      }
     }
-    return key;
+    return value;
   }
 
-  public static String getSDKVersion(){
+  public static String getSDKVersion() {
     return StringUtils.join("java-", getResource("api.version"));
   }
 }
