@@ -6,12 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import www.wechaturl.us.fangfeng.sdk.http.HttpClient;
 import www.wechaturl.us.fangfeng.sdk.common.Const;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
+import www.wechaturl.us.fangfeng.sdk.http.HttpClientTemplate;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
 import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
-import www.wechaturl.us.fangfeng.sdk.vo.Response;
-import www.wechaturl.us.fangfeng.sdk.vo.UrlArrayVO;
-import www.wechaturl.us.fangfeng.sdk.vo.UrlParam;
-import www.wechaturl.us.fangfeng.sdk.vo.UrlVO;
+import www.wechaturl.us.fangfeng.sdk.vo.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -27,9 +25,9 @@ import java.util.Map;
  * </ul>
  */
 public class SingleUrlProtectService {
-  private String REQUEST_URL = UrlUtil.getSingleUrlProtectUrl();
-  private ObjectMapper objectMapper = new ObjectMapper();
-  private HttpClient httpClient = new HttpClient();
+  private final String REQUEST_URL = UrlUtil.getSingleUrlProtectUrl();
+  private final HttpClientTemplate httpClientTemplate = new HttpClientTemplate();
+
 
   public SingleUrlProtectService() {
   }
@@ -63,10 +61,9 @@ public class SingleUrlProtectService {
    * @throws DefaultException 通常是参数没有初始化
    * @throws JsonProcessingException Json转对象异常
    */
-  public Response addUrl(UrlParam urlParam) throws DefaultException, JsonProcessingException {
+  public Response<WeiboVO> addUrl(UrlParam urlParam) throws DefaultException, JsonProcessingException {
     Map<String, String> paraMap = buildPara(urlParam, Const.OPERATION_ADD);
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<WeiboVO>>() {
     });
   }
 
@@ -102,8 +99,7 @@ public class SingleUrlProtectService {
     } else {
       paraMap.put("id", urlParam.getId());
     }
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<String>>() {
     });
   }
 
@@ -136,8 +132,7 @@ public class SingleUrlProtectService {
    */
   public Response updateUrl(UrlParam urlParam) throws DefaultException, JsonProcessingException {
     Map<String, String> paraMap = buildPara(urlParam, Const.OPERATION_EDIT);
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<String>>() {
     });
   }
 
@@ -183,8 +178,7 @@ public class SingleUrlProtectService {
     if (StringUtils.isNotEmpty(urlParam.getRows())) {
       paraMap.put("rows", urlParam.getRows());
     }
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response<UrlArrayVO<UrlVO>>>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<UrlArrayVO<UrlVO>>>() {
     });
   }
 

@@ -7,6 +7,7 @@ import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class CommonUtil {
 
@@ -42,5 +43,16 @@ public class CommonUtil {
 
   public static String getSDKVersion() {
     return StringUtils.join("java-", getResource("api.version"));
+  }
+
+  /**
+   * get an random number
+   *
+   * @param from from which number(inclusive)
+   * @param to to witch number(exclusive)
+   * @return
+   */
+  public static int getAnRandomNumber(int from, int to) {
+    return ThreadLocalRandom.current().nextInt(from, to);
   }
 }

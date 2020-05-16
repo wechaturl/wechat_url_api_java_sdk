@@ -1,3 +1,4 @@
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
@@ -5,14 +6,27 @@ import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
 public class CommonUtilTest {
 
   @Test
-  public void getResourceTest(){
+  public void getResourceTest() {
     String version = CommonUtil.getResource("api.version");
     Assert.assertEquals("1.0.0", version);
   }
 
   @Test
-  public void getSDKVersionTest(){
+  public void getSDKVersionTest() {
     String version = CommonUtil.getSDKVersion();
     Assert.assertEquals("java-1.0.0", version);
+  }
+
+  @Test
+  public void getAnRandomNumberTest() {
+    for (int i = 0; i < 1000; i++) {
+      Assert.assertEquals(1, CommonUtil.getAnRandomNumber(1, 2));
+      Assert.assertTrue(CommonUtil.getAnRandomNumber(0, 6) >= 0
+              && CommonUtil.getAnRandomNumber(0, 6) < 6);
+    }
+  }
+
+  @Test
+  public void test() {
   }
 }

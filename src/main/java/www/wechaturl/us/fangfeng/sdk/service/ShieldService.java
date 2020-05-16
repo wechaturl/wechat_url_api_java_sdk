@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class ShieldService {
 
-  private ObjectMapper objectMapper = new ObjectMapper();
-  private HttpClient httpClient = new HttpClient();
+  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final HttpClient httpClient = new HttpClient();
 
   private String shieldUrl = UrlUtil.getShieldCloudCrawlerCheckUrl();
 
@@ -45,6 +45,8 @@ public class ShieldService {
     paraMap.put("appkey", urlParam.getAppkey());
     paraMap.put("ip", urlParam.getIp());
     String res = httpClient.doPost(shieldUrl, paraMap);
-    return objectMapper.readValue(res, new TypeReference<ShieldCloudCheckResponse>(){});
+    ShieldCloudCheckResponse response = objectMapper.readValue(res, new TypeReference<ShieldCloudCheckResponse>(){});
+    response.setOriginalResponseBody(res);
+    return response;
   }
 }

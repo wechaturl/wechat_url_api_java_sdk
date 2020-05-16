@@ -40,8 +40,6 @@ public class HttpClient {
   public HttpClient() {
   }
 
-  ;
-
   public String doGet(String url, Map<String, String> paraMap) {
     SSLContext sslContext = null;
     try {
@@ -107,7 +105,6 @@ public class HttpClient {
     String result = null;
     CloseableHttpResponse response = null;
     try {
-      paraMap.put("api_version", CommonUtil.getSDKVersion());
       HttpPost httpPost = new HttpPost(url);
       httpPost.setConfig(getDefaultRequestConfig());
       httpPost.setEntity(new UrlEncodedFormEntity(convert(paraMap), UTF_8));
