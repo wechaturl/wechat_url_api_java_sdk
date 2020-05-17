@@ -11,6 +11,9 @@ public class Response<T> implements Serializable {
 
   private String code;
   private String message;
+  @JsonProperty("weibo_shorturl")
+  private String weiboShortUrl;
+  private String originalResponseBody;
   @JsonProperty("next_get_date")
   private String nextGetDate;
   @JsonProperty("next_get_time")
@@ -33,6 +36,22 @@ public class Response<T> implements Serializable {
 
   public void setMessage(String message) {
     this.message = message;
+  }
+
+  public String getWeiboShortUrl() {
+    return weiboShortUrl;
+  }
+
+  public void setWeiboShortUrl(String weiboShortUrl) {
+    this.weiboShortUrl = weiboShortUrl;
+  }
+
+  public String getOriginalResponseBody() {
+    return originalResponseBody;
+  }
+
+  public void setOriginalResponseBody(String originalResponseBody) {
+    this.originalResponseBody = originalResponseBody;
   }
 
   public T getData() {
@@ -68,21 +87,5 @@ public class Response<T> implements Serializable {
   public Response<T> setWechatNotificationResult(WechatNotificationResultVO wechatNotificationResult) {
     this.wechatNotificationResult = wechatNotificationResult;
     return this;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof Response)) return false;
-    Response<?> response = (Response<?>) o;
-    return Objects.equals(getCode(), response.getCode()) &&
-            Objects.equals(getMessage(), response.getMessage()) &&
-            Objects.equals(wechatNotificationResult, response.wechatNotificationResult) &&
-            Objects.equals(getData(), response.getData());
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(getCode(), getMessage(), wechatNotificationResult, getData());
   }
 }

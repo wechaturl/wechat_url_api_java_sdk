@@ -5,9 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>www.wechaturl.us.fangfeng.sdk</groupId>
-  <artifactId>PhoenixWechaurlSdk</artifactId>
+  <artifactId>PhoenixWechatUrlSdk</artifactId>
   <version>1.0.0</version>
-  <name>PhoenixWechaurlSdk</name>
+  <name>PhoenixWechatUrlSdk</name>
+  <packaging>jar</packaging>
 
 
   <properties>
@@ -103,5 +104,11 @@
         </executions>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
   </build>
 </project>

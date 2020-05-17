@@ -6,9 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import www.wechaturl.us.fangfeng.sdk.common.Const;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
 import www.wechaturl.us.fangfeng.sdk.http.HttpClient;
+import www.wechaturl.us.fangfeng.sdk.http.HttpClientTemplate;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
-import www.wechaturl.us.fangfeng.sdk.*;
 import org.apache.commons.lang3.StringUtils;
+import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
 import www.wechaturl.us.fangfeng.sdk.vo.*;
 
 import java.util.HashMap;
@@ -22,10 +23,9 @@ import java.util.Map;
  * </ul>
  */
 public class ShortUrlService {
-  private static final String ENTRY_DOMAIN_REQUEST_URL = "https://wechaturl.us/api/ShortDomain.json";
-  private static final String LONG_TO_SHORT_URL = "https://wechaturl.us/api/Long2ShortUrl.json";
-  private ObjectMapper objectMapper = new ObjectMapper();
-  private HttpClient httpClient = new HttpClient();
+  private final String shortUrlEntryDomainUrl = UrlUtil.getShortUrlEntryDomainUrl();
+  private final String longToShortUrl = UrlUtil.getShortUrlLongToShortUrl();
+  private final HttpClientTemplate httpClientTemplate = new HttpClientTemplate();
 
   public ShortUrlService(){
   }
@@ -74,8 +74,7 @@ public class ShortUrlService {
     if (StringUtils.isNotEmpty(urlParam.getRows())) {
       paraMap.put("rows", urlParam.getRows());
     }
-    String result = httpClient.doPost(ENTRY_DOMAIN_REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response<UrlArrayVO<EntryDomainUrlVO>>>() {
+    return httpClientTemplate.processPost(shortUrlEntryDomainUrl, paraMap, new TypeReference<Response<UrlArrayVO<EntryDomainUrlVO>>>() {
     });
   }
 
@@ -90,7 +89,7 @@ public class ShortUrlService {
    *     <li>appkey - http://www.wechaturl.us/user/index.html 去免费获取appkey</li>
    *     <li>entry_type - 默认wechaturl;
    *                     目前支持['wechaturl','sohuurl','ueeurl','weibourl','tencent_weibourl','is_gd_url'];
-   *                     这次类型可以到https://wechaturl.gitbook.io/wechaturl/the-third-shorturl 查看解释</li>
+   *                     这些类型可以到https://wechaturl.gitbook.io/wechaturl/the-third-shorturl 查看解释</li>
    *     <li>url - http(s)://开头的网址</li>
    *   </ul>
    * </blockquote>
@@ -111,8 +110,7 @@ public class ShortUrlService {
     if(StringUtils.isNotEmpty(urlParam.getEntryType())){
       paraMap.put("entry_type", urlParam.getEntryType());
     }
-    String result = httpClient.doPost(LONG_TO_SHORT_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response<ShortUrlVO>>() {
+    return httpClientTemplate.processPost(longToShortUrl, paraMap, new TypeReference<Response<ShortUrlVO>>() {
     });
   }
 }
