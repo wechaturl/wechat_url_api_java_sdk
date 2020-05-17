@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 本类提供任意网址防封API列表如下：
  * <ul>
- *     <li>addurl - 添加防封网址</li>
+ *     <li>addUrl - 添加防封网址</li>
  *     <li>updateUrl - 修改防封网址</li>
  *     <li>deleteUrl - 删除防封网址</li>
  *     <li>listUrl - 获取防封网址列表</li>

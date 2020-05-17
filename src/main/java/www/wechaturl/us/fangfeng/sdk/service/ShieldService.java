@@ -41,7 +41,7 @@ public class ShieldService {
    * @throws DefaultException 通常是参数没有初始化
    * @throws JsonProcessingException 通常是参数没有初始化
    */
-  public ShieldCloudCheckResponse ShieldCloudCrawlerCheck(UrlParam urlParam, Map<String, String> dynamicParam) throws DefaultException, JsonProcessingException {
+  public ShieldCloudCheckResponse shieldCloudCrawlerCheck(UrlParam urlParam, Map<String, String> dynamicParam) throws DefaultException, JsonProcessingException {
     CommonUtil.isNotNull(urlParam);
     Map<String, String> paraMap = new HashMap<>();
     paraMap.put("appid", urlParam.getAppid());
