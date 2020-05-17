@@ -10,11 +10,12 @@ import java.util.Objects;
 /**
  * Response for api 'shieldCloudCrawlerCheck'
  */
-public class ShieldCloudCheckResponse implements Serializable {
+public class ShieldCloudCheckResponse extends Response implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String code;
   private String msg;
+  private String originalResponseBody;
   private String ip;
   private String message;
   @JsonProperty("search_range")
@@ -36,6 +37,16 @@ public class ShieldCloudCheckResponse implements Serializable {
 
   public void setMsg(String msg) {
     this.msg = msg;
+  }
+
+  @Override
+  public String getOriginalResponseBody() {
+    return originalResponseBody;
+  }
+
+  @Override
+  public void setOriginalResponseBody(String originalResponseBody) {
+    this.originalResponseBody = originalResponseBody;
   }
 
   public String getIp() {

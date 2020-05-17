@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import www.wechaturl.us.fangfeng.sdk.http.HttpClient;
 import www.wechaturl.us.fangfeng.sdk.common.Const;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
+import www.wechaturl.us.fangfeng.sdk.http.HttpClientTemplate;
 import www.wechaturl.us.fangfeng.sdk.utils.CharacterUtil;
 import www.wechaturl.us.fangfeng.sdk.utils.CommonUtil;
-import www.wechaturl.us.fangfeng.sdk.*;
 import org.apache.commons.lang3.StringUtils;
+import www.wechaturl.us.fangfeng.sdk.utils.UrlUtil;
 import www.wechaturl.us.fangfeng.sdk.vo.*;
 
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import java.util.Map;
  * 本类提供域名防封API列表如下：
  * <ul>
  *     <li>listLandDomain - 获取落地页域名列表</li>
- *     <li>addurl - 添加防封网址</li>
+ *     <li>addUrl - 添加防封网址</li>
  *     <li>updateUrl - 修改防封网址</li>
  *     <li>deleteUrl - 删除防封网址</li>
  *     <li>listUrl - 获取防封网址列表</li>
@@ -29,9 +29,9 @@ import java.util.Map;
  * </ul>
  */
 public class DomainUrlProtectService {
-  private static final String REQUEST_URL = "https://wechaturl.us/api/DomainShortUrl.json";
-  private ObjectMapper objectMapper = new ObjectMapper();
-  private HttpClient httpClient = new HttpClient();
+  private static final String REQUEST_URL = UrlUtil.getDomainUrlProtectUrl();
+  private final HttpClientTemplate httpClientTemplate = new HttpClientTemplate();
+  private static final String SYMBOLS = CommonUtil.getResource("dynamic.random.symbol");
 
   public DomainUrlProtectService() {
   }
@@ -64,7 +64,7 @@ public class DomainUrlProtectService {
    * @throws DefaultException        参数没有初始化
    * @throws JsonProcessingException Json转对象异常
    */
-  public Response addUrl(UrlParam urlParam) throws DefaultException, JsonProcessingException {
+  public Response<WeiboVO> addUrl(UrlParam urlParam) throws DefaultException, JsonProcessingException {
     CommonUtil.isNotNull(urlParam);
     Map<String, String> paraMap = new HashMap<>();
     paraMap.put("appid", urlParam.getAppid());
@@ -86,8 +86,7 @@ public class DomainUrlProtectService {
     if (StringUtils.isNotEmpty(urlParam.getDescription())) {
       paraMap.put("description", urlParam.getDescription());
     }
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<WeiboVO>>() {
     });
   }
 
@@ -137,8 +136,7 @@ public class DomainUrlProtectService {
     if (StringUtils.isNotEmpty(urlParam.getGroupId())) {
       paraMap.put("group_id", urlParam.getGroupId());
     }
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<String>>() {
     });
   }
 
@@ -199,8 +197,7 @@ public class DomainUrlProtectService {
     if (StringUtils.isNotEmpty(urlParam.getDescription())) {
       paraMap.put("description", urlParam.getDescription());
     }
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<String>>() {
     });
   }
 
@@ -251,8 +248,7 @@ public class DomainUrlProtectService {
     if (StringUtils.isNotEmpty(urlParam.getRows())) {
       paraMap.put("rows", urlParam.getRows());
     }
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response<UrlArrayVO<UrlVO>>>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<UrlArrayVO<UrlVO>>>() {
     });
   }
 
@@ -291,8 +287,7 @@ public class DomainUrlProtectService {
     if (StringUtils.isNotEmpty(urlParam.getDomain())) {
       paraMap.put("domain", urlParam.getDomain());
     }
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response<UrlArrayVO<UrlVO>>>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<UrlArrayVO<UrlVO>>>() {
     });
   }
 
@@ -332,8 +327,7 @@ public class DomainUrlProtectService {
     if (StringUtils.isNotEmpty(urlParam.getCheckType())) {
       paraMap.put("check_type", urlParam.getCheckType());
     }
-    String result = httpClient.doPost(REQUEST_URL, paraMap);
-    return objectMapper.readValue(result, new TypeReference<Response<DomainCheckResultVO>>() {
+    return httpClientTemplate.processPost(REQUEST_URL, paraMap, new TypeReference<Response<DomainCheckResultVO>>() {
     });
   }
 
@@ -347,7 +341,7 @@ public class DomainUrlProtectService {
    *     <li>appid - http://www.wechaturl.us/user/index.html 去免费获取appid</li>
    *     <li>appkey - http://www.wechaturl.us/user/index.html 去免费获取appkey</li>
    *     <li>requestUri - request_uri必须以'/'开头</li>
-   *     <li>groupId - 0(默认分组),2(海外网站),3(国内竞价),4(客户测试) - 默认为0</li>
+   *     <li>groupId - 0(默认分组),2(海外网站),3(国内竞价),4(客户测试)</li>
    *   </ul>
    *   其中以下字段为选填：
    *   <ul>
@@ -361,69 +355,61 @@ public class DomainUrlProtectService {
    * <p>本API接口对应的文档页面 - <a href="https://wechaturl.gitbook.io/wechaturl/domain/domain_url_anyurl">https://wechaturl.gitbook.io/wechaturl/domain/domain_url_anyurl</a></p>
    *
    * @param urlParam 包含各参数实例对象
+   * @param hideQQMenu 是否隐藏QQ菜单
    * @return Response
    * @throws DefaultException        参数没有初始化
    * @throws JsonProcessingException Json转对象异常
    */
-  public String dynamicSetURIParameters(UrlParam urlParam) throws DefaultException, JsonProcessingException {
+  public String dynamicSetURIParameters(UrlParam urlParam, boolean hideQQMenu) throws DefaultException, JsonProcessingException {
     CommonUtil.isNotNull(urlParam);
     String domainUrl = getDomainUrl(urlParam);
-    domainUrl = domainUrl.endsWith("/") ? domainUrl : StringUtils.join(domainUrl, "/");
+    domainUrl = domainUrl.endsWith("/") ? StringUtils.substring(domainUrl, 0, domainUrl.length() - 1) : domainUrl;
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
     String urlParamJsonString = objectMapper.writeValueAsString(urlParam);
     String base64EncodedString = CharacterUtil.base64Encode(urlParamJsonString);
-    String url = StringUtils.join(domainUrl, base64EncodedString);
+    String url = StringUtils.join(domainUrl, getRandomSymbol(), base64EncodedString);
     String weiboShortUrl = getWechatShortUrl(urlParam, url);
-    return  weiboShortUrl;
-//    Map<String, String> paraMap = new HashMap<>();
-//    paraMap.put("appid", urlParam.getAppid());
-//    paraMap.put("appkey", urlParam.getAppkey());
-//    paraMap.put("group_id", urlParam.getGroupId());
-//    paraMap.put("request_uri", urlParam.getRequestUri());
-//    if (StringUtils.isNotEmpty(urlParam.getVisitType())) {
-//      paraMap.put("visit_type", urlParam.getVisitType());
-//    }
-//    if (StringUtils.isNotEmpty(urlParam.getTitle())) {
-//      paraMap.put("title", urlParam.getTitle());
-//    }
-//    if (StringUtils.isNotEmpty(urlParam.getKeywords())) {
-//      paraMap.put("keywords", urlParam.getKeywords());
-//    }
-//    if (StringUtils.isNotEmpty(urlParam.getDescription())) {
-//      paraMap.put("description", urlParam.getDescription());
-//    }
-    // TODO have API to call?
-//    String result = httpClient.doPost(REQUEST_URL, paraMap);
-//    return objectMapper.readValue(result, new TypeReference<Response>() {
-//    });
+    if(hideQQMenu){
+      return weiboShortUrl;
+    }
+    return  weiboShortUrl + "?_wv=2";
   }
 
   private String getDomainUrl(UrlParam urlParam) throws DefaultException, JsonProcessingException {
     UrlParam newUrlParam = new UrlParam(Integer.valueOf(urlParam.getAppid()), urlParam.getAppkey());
     newUrlParam.setLayerType("layer_top");
+    newUrlParam.setStatus(4000);
     ShortUrlService shortUrlService = new ShortUrlService();
     Response<UrlArrayVO<EntryDomainUrlVO>> response = shortUrlService.listEntryDomainUrl(newUrlParam);
     if(!"1".equals(response.getCode())){
       throw new DefaultException(response.getMessage());
     }
-    Map<String, String> dMap = new HashMap();
-    response.getData().getList().stream().findFirst().ifPresent(entryDomainUrlVO -> {
-      dMap.put("domain", StringUtils.join(entryDomainUrlVO.getScheme(), entryDomainUrlVO.getDomain()));
-    });
-    if(dMap.isEmpty()){
-      throw new DefaultException("先到https://www.wechaturl.us/user/index.html#business_management/user_short_domain_list 添加一个短网址(子)域名，类型选择<入口域名>");
+    int size = response.getData().getCount();
+    if( size == 0){
+      throw new DefaultException("没有找到状态为4000的入口域名，请到https://www.wechaturl.us/user/index.html#business_management/user_short_domain_list 添加一个短网址(子)域名，类型选择<入口域名>");
     }
-    return dMap.get("domain");
+    int pointer = CommonUtil.getARandomNumber(0, size);
+    EntryDomainUrlVO entryDomainUrlVO = response.getData().getList().get(pointer);
+    return StringUtils.join(entryDomainUrlVO.getScheme(), entryDomainUrlVO.getDomain());
   }
 
   private String getWechatShortUrl(UrlParam urlParam, String url) throws DefaultException, JsonProcessingException {
     UrlParam newUrlParam = new UrlParam(Integer.valueOf(urlParam.getAppid()), urlParam.getAppkey(), url);
     ShortUrlService shortUrlService = new ShortUrlService();
+    if(StringUtils.isNotEmpty(urlParam.getEntryType())){
+      newUrlParam.setEntryType(urlParam.getEntryType());
+    }
     Response<ShortUrlVO> response = shortUrlService.transferLongToShortUrl(newUrlParam);
     if(!"1".equals(response.getCode())){
       throw new DefaultException(response.getMessage());
     }
     return response.getData().getShortUrl();
+  }
+
+  private String getRandomSymbol(){
+    String[] symbols = StringUtils.split(SYMBOLS, ",");
+    int pointer = CommonUtil.getARandomNumber(0, symbols.length);
+    return symbols[pointer];
   }
 }
