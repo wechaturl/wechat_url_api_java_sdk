@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import www.wechaturl.us.fangfeng.sdk.http.HttpClient;
 import www.wechaturl.us.fangfeng.sdk.common.Const;
 import www.wechaturl.us.fangfeng.sdk.exception.DefaultException;
 import www.wechaturl.us.fangfeng.sdk.http.HttpClientTemplate;
@@ -390,7 +389,7 @@ public class DomainUrlProtectService {
     if( size == 0){
       throw new DefaultException("没有找到状态为4000的入口域名，请到https://www.wechaturl.us/user/index.html#business_management/user_short_domain_list 添加一个短网址(子)域名，类型选择<入口域名>");
     }
-    int pointer = CommonUtil.getAnRandomNumber(0, size);
+    int pointer = CommonUtil.getARandomNumber(0, size);
     EntryDomainUrlVO entryDomainUrlVO = response.getData().getList().get(pointer);
     return StringUtils.join(entryDomainUrlVO.getScheme(), entryDomainUrlVO.getDomain());
   }
@@ -410,7 +409,7 @@ public class DomainUrlProtectService {
 
   private String getRandomSymbol(){
     String[] symbols = StringUtils.split(SYMBOLS, ",");
-    int pointer = CommonUtil.getAnRandomNumber(0, symbols.length);
+    int pointer = CommonUtil.getARandomNumber(0, symbols.length);
     return symbols[pointer];
   }
 }

@@ -46,13 +46,13 @@ public class CommonUtil {
   }
 
   /**
-   * get an random number
+   * get a random number
    *
    * @param from from which number(inclusive)
    * @param to to witch number(exclusive)
-   * @return
+   * @return a random number
    */
-  public static int getAnRandomNumber(int from, int to) {
+  public static int getARandomNumber(int from, int to) {
     return ThreadLocalRandom.current().nextInt(from, to);
   }
 }

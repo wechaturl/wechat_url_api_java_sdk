@@ -38,8 +38,8 @@ public class ShieldService {
    * @param urlParam 参数对象，详见使用说明
    * @param dynamicParam 动态参数
    * @return ShieldCloudCheckResponse
-   * @throws DefaultException
-   * @throws JsonProcessingException
+   * @throws DefaultException 通常是参数没有初始化
+   * @throws JsonProcessingException 通常是参数没有初始化
    */
   public ShieldCloudCheckResponse ShieldCloudCrawlerCheck(UrlParam urlParam, Map<String, String> dynamicParam) throws DefaultException, JsonProcessingException {
     CommonUtil.isNotNull(urlParam);
