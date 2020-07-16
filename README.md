@@ -135,3 +135,8 @@
 > Telegram: @weixinfangfeng :https://t.me/weixinfangfeng
 
 > skype: https://join.skype.com/invite/wU9pVGpzmpQs
+
+> [ application blacklist legal 应用黑名单法律规定 ](https://wechaturl.gitbook.io/wechaturl/end/blanklist)
+
+
+ 
